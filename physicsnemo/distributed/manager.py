@@ -548,7 +548,7 @@ class DistributedManager(object):
                 manager._local_rank = local_rank
 
         manager._device = torch.device(
-            f"cuda:{manager.local_rank}" if torch.cuda.is_available() else "cpu"
+            f"cuda:{manager._local_rank}" if torch.cuda.is_available() else "cpu"
         )
 
         if manager._distributed:
@@ -556,22 +556,22 @@ class DistributedManager(object):
             try:
                 dist.init_process_group(
                     backend,
-                    rank=manager.rank,
-                    world_size=manager.world_size,
+                    rank=manager._rank,
+                    world_size=manager._world_size,
                     device_id=manager._device,
                 )
             except TypeError:
                 # device_id only introduced in PyTorch 2.3
                 dist.init_process_group(
                     backend,
-                    rank=manager.rank,
-                    world_size=manager.world_size,
+                    rank=manager._rank,
+                    world_size=manager._world_size,
                 )
 
         if torch.cuda.is_available():
             # Set device for this process and empty cache to optimize memory usage
-            torch.cuda.set_device(manager.device)
-            torch.cuda.device(manager.device)
+            torch.cuda.set_device(manager._device)
+            torch.cuda.device(manager._device)
             torch.cuda.empty_cache()
 
         manager._initialization_method = method
