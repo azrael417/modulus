@@ -551,8 +551,6 @@ class DistributedManager(object):
             f"cuda:{manager._local_rank}" if torch.cuda.is_available() else "cpu"
         )
 
-        print("PHYSICSNEMO DEVICE:", manager._device)
-
         if manager._distributed:
             # Setup distributed process group
             try:
@@ -562,9 +560,8 @@ class DistributedManager(object):
                     world_size=manager._world_size,
                     device_id=manager._device,
                 )
-            except TypeError as err:
+            except TypeError:
                 # device_id only introduced in PyTorch 2.3
-                print(f"Ecountered TypeError {err}, falling back to old wireup method.")
                 dist.init_process_group(
                     backend,
                     rank=manager._rank,
