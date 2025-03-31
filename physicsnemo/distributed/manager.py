@@ -551,8 +551,6 @@ class DistributedManager(object):
             f"cuda:{manager.local_rank}" if torch.cuda.is_available() else "cpu"
         )
 
-        print(manager._device)
-
         if manager._distributed:
             # Setup distributed process group
             try:
