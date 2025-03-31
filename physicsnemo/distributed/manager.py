@@ -562,8 +562,9 @@ class DistributedManager(object):
                     world_size=manager._world_size,
                     device_id=manager._device,
                 )
-            except TypeError:
+            except TypeError as err:
                 # device_id only introduced in PyTorch 2.3
+                print(f"Ecountered TypeError {err}, falling back to old wireup method.")
                 dist.init_process_group(
                     backend,
                     rank=manager._rank,
