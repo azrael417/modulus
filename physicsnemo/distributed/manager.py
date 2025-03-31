@@ -322,7 +322,7 @@ class DistributedManager(object):
 
         # Read env variables
         addr = os.environ.get("MASTER_ADDR")
-        port = int(os.environ.get("MASTER_PORT"))
+        port = os.environ.get("MASTER_PORT")
 
         DistributedManager.setup(
             rank=rank,
@@ -393,7 +393,7 @@ class DistributedManager(object):
             return
 
         addr = os.getenv("MASTER_ADDR", "localhost")
-        port = int(os.getenv("MASTER_PORT", "12355"))
+        port = os.getenv("MASTER_PORT", "12355")
         # https://pytorch.org/docs/master/notes/cuda.html#id5
         # was changed in version 2.2
         if torch.__version__ < (2, 2):
@@ -550,6 +550,8 @@ class DistributedManager(object):
         manager._device = torch.device(
             f"cuda:{manager._local_rank}" if torch.cuda.is_available() else "cpu"
         )
+
+        print("PHYSICSNEMO DEVICE:", manager._device)
 
         if manager._distributed:
             # Setup distributed process group
