@@ -311,7 +311,7 @@ class DistributedManager(object):
         rank = int(os.environ.get("RANK"))
         world_size = int(os.environ.get("WORLD_SIZE"))
         if "LOCAL_RANK" in os.environ:
-            local_rank = os.environ.get("LOCAL_RANK")
+            local_rank = int(os.environ.get("LOCAL_RANK"))
             if local_rank is not None:
                 local_rank = int(local_rank)
             else:
@@ -322,7 +322,7 @@ class DistributedManager(object):
 
         # Read env variables
         addr = os.environ.get("MASTER_ADDR")
-        port = os.environ.get("MASTER_PORT")
+        port = int(os.environ.get("MASTER_PORT"))
 
         DistributedManager.setup(
             rank=rank,
@@ -393,7 +393,7 @@ class DistributedManager(object):
             return
 
         addr = os.getenv("MASTER_ADDR", "localhost")
-        port = os.getenv("MASTER_PORT", "12355")
+        port = int(os.getenv("MASTER_PORT", "12355"))
         # https://pytorch.org/docs/master/notes/cuda.html#id5
         # was changed in version 2.2
         if torch.__version__ < (2, 2):
