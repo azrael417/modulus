@@ -551,6 +551,8 @@ class DistributedManager(object):
             f"cuda:{manager.local_rank}" if torch.cuda.is_available() else "cpu"
         )
 
+        print(manager._device)
+
         if manager._distributed:
             # Setup distributed process group
             try:
@@ -558,7 +560,7 @@ class DistributedManager(object):
                     backend,
                     rank=manager.rank,
                     world_size=manager.world_size,
-                    device_id=manager.device,
+                    device_id=manager._device,
                 )
             except TypeError:
                 # device_id only introduced in PyTorch 2.3
